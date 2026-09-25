@@ -1,1 +1,29 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Register | MAXSTORE</title><link rel="stylesheet" href="styles.css"></head><body data-maxstore-api="https://script.google.com/macros/s/AKfycbwMEE1jLlrnOaXJwegHZ4uT0IUghAR4qzuVDYOhStP97UiyCfBQ7HRkxQKItadvgnP99Q/exec"><div class="wrap"><div class="glass form"><div class="logo">MAX<span>STORE</span></div><h1>Register</h1><div id="m"></div><div class="field"><label>Name</label><input id="name"></div><div class="field"><label>Email</label><input id="email" type="email"></div><div class="field"><label>Phone</label><input id="phone"></div><div class="field"><label>Password</label><input id="password" type="password"></div><button class="btn primary" onclick="reg()">Create Account</button></div></div><script src="app.js"></script><script>async function reg(){const r=await apiPost({action:"register",name:name.value,email:email.value,phone:phone.value,password:password.value});m.innerHTML='<div class="notice '+(r.success?'ok':'err')+'">'+esc(r.message||"")+'</div>';if(r.success)setTimeout(()=>location.href="login.html",700)}</script></body></html>
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register | MAXSTORE</title><link rel="stylesheet" href="styles.css"></head>
+<body data-maxstore-api="https://script.google.com/macros/s/AKfycbwMEE1jLlrnOaXJwegHZ4uT0IUghAR4qzuVDYOhStP97UiyCfBQ7HRkxQKItadvgnP99Q/exec">
+<div class="wrap"><div class="glass form"><div class="logo">MAX<span>STORE</span></div><h1>Create Account</h1>
+<div id="m"></div>
+<div class="field"><label>Account type</label><div style="display:flex;gap:10px;flex-wrap:wrap">
+<label class="role-choice"><input type="radio" name="role" value="buyer" checked onchange="toggleSeller()"> Buyer</label>
+<label class="role-choice"><input type="radio" name="role" value="seller" onchange="toggleSeller()"> Seller</label></div></div>
+<div class="field"><label>Name</label><input id="name"></div>
+<div class="field"><label>Email</label><input id="email" type="email"></div>
+<div class="field"><label>Phone</label><input id="phone"></div>
+<div id="sellerFields" style="display:none">
+<div class="field"><label>Store Name</label><input id="storeName" placeholder="Your store name"></div>
+<div class="field"><label>Store Address</label><input id="storeAddress" placeholder="Store / business address"></div>
+</div>
+<div class="field"><label>Password</label><input id="password" type="password"></div>
+<button class="btn primary" onclick="reg()">Create Account</button>
+<p class="muted">Already have an account? <a href="login.html">Login</a></p>
+</div></div>
+<script src="app.js"></script><script>
+function toggleSeller(){document.getElementById("sellerFields").style.display=document.querySelector('input[name="role"]:checked').value==="seller"?"block":"none";}
+async function reg(){
+ const role=document.querySelector('input[name="role"]:checked').value;
+ const r=await apiPost({action:"register",role,name:name.value,email:email.value,phone:phone.value,password:password.value,storeName:storeName.value,storeAddress:storeAddress.value});
+ m.innerHTML='<div class="notice '+(r.success?'ok':'err')+'">'+esc(r.message||"")+'</div>';
+ if(r.success)setTimeout(()=>location.href="login.html",900);
+}
+</script></body></html>
